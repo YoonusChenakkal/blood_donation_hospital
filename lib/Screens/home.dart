@@ -1,8 +1,9 @@
-import 'package:blood_donation_hospital/Screens/registerCampaign.dart';
+import 'package:blood_donation_hospital/Providers/donorProvider.dart';
 import 'package:blood_donation_hospital/widgets/customBanner.dart';
 import 'package:blood_donation_hospital/widgets/customCard.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,6 +11,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final donorProvider = Provider.of<DonorProvider>(context);
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -69,7 +72,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   CustomCard(
                     title: 'Total\nDonors',
-                    number: '990',
+                    number: donorProvider.donors.length.toString(),
                     icon: FontAwesomeIcons.hospital,
                   ),
                   CustomCard(
@@ -108,13 +111,7 @@ class HomePage extends StatelessWidget {
                     'Organ surgery is shedule at 3:00 today\n\nDoctor: V Subramani\nAnasthesia Specialist: Neena Mathew',
                 buttonText: 'View More',
                 textColor: Colors.black,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterCampaign(),
-                      ));
-                },
+                onPressed: () {},
               ),
               Padding(
                 padding: EdgeInsets.only(

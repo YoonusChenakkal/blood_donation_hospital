@@ -1,98 +1,41 @@
+import 'package:blood_donation_hospital/Providers/chatsProvider.dart';
 import 'package:blood_donation_hospital/Providers/donorProvider.dart';
 import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/infoCard.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class DonorListPage extends StatelessWidget {
-  const DonorListPage({super.key});
+class ChatsPage extends StatelessWidget {
+  const ChatsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<String> bloodGroups = [
-      'All',
-      'A+',
-      'A-',
-      'B+',
-      'B-',
-      'AB+',
-      'AB-',
-      'O+',
-      'O-'
-    ];
-
-    String selectedBloodGroup = 'All';
-
-    void _filterByBloodGroup(BuildContext context, String group) {
-      Provider.of<DonorProvider>(context, listen: false)
-          .filterByBloodGroup(group);
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
-          'Donor List',
-          style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w600),
-        ),
-        automaticallyImplyLeading: false,
         centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'donors Chat', // Assign a unique tag
-
-        //  shape: CircleBorder(),
-        backgroundColor: Colors.red,
-        onPressed: () => Navigator.pushNamed(context, '/chat'),
-        child: const Icon(
-          Icons.chat,
-          color: Colors.white,
+        title: Text(
+          'Chats',
+          style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w600),
         ),
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 5.h,
-                width: 75.w,
-                child: SearchBar(
-                  onChanged: (query) =>
-                      Provider.of<DonorProvider>(context, listen: false)
-                          .searchDonors(query),
-                  backgroundColor: WidgetStatePropertyAll(Colors.red[50]),
-                  leading: Icon(Icons.search),
-                  hintText: 'Search',
-                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6))),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 1.w),
-                child: PopupMenuButton<String>(
-                  icon: Icon(Icons.filter_list, size: 24.sp),
-                  onSelected: (value) {
-                    selectedBloodGroup = value;
-                    _filterByBloodGroup(context, value);
-                  },
-                  itemBuilder: (context) {
-                    return bloodGroups.map((group) {
-                      return PopupMenuItem<String>(
-                        value: group,
-                        child: Text(
-                          group,
-                          style: TextStyle(fontSize: 16.sp),
-                        ),
-                      );
-                    }).toList();
-                  },
-                ),
-              ),
-            ],
+          SizedBox(
+            height: 5.h,
+            width: 80.w,
+            child: SearchBar(
+              onChanged: (query) =>
+                  Provider.of<DonorProvider>(context, listen: false)
+                      .searchDonors(query),
+              backgroundColor: WidgetStatePropertyAll(Colors.red[50]),
+              leading: const Icon(Icons.search),
+              hintText: 'Search',
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6))),
+            ),
           ),
           Expanded(
             child: Consumer<DonorProvider>(
@@ -130,7 +73,7 @@ class DonorListPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'No Donors Available',
+                          'No Chat Available',
                           style: TextStyle(fontSize: 17.sp),
                         ),
                         SizedBox(
@@ -152,7 +95,7 @@ class DonorListPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "No donors match your search or filter.",
+                          "No chat match your search.",
                           style: TextStyle(fontSize: 17.sp),
                         ),
                         SizedBox(
@@ -172,19 +115,38 @@ class DonorListPage extends StatelessWidget {
                   onRefresh: () async {
                     await donorProvider.loadDonors();
                   },
-                  child: ListView.builder(
-                    itemCount: donorProvider.filteredDonors.length,
-                    itemBuilder: (context, index) {
-                      final donor = donorProvider.filteredDonors[index];
-                      return InfoCard(
-                        title: donor.user,
-                        address: donor.address,
-                        contactNumber: donor.contactNumber.toString(),
-                        date: DateFormat('dd-MM-yyyy').format(donor.createdAt),
-                        badgeText: donor.bloodGroup,
-                        type: InfoCardType.donor,
-                      );
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: ListView.builder(
+                      itemCount: donorProvider.filteredDonors.length,
+                      itemBuilder: (context, index) {
+                        final donor = donorProvider.filteredDonors[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 3, left: 8, right: 8),
+                          child: ListTile(
+                            tileColor: const Color.fromARGB(255, 248, 248, 248),
+                            leading: Icon(Icons.person),
+                            title: Text(
+                              donor.user,
+                              style: TextStyle(
+                                  fontSize: 17.sp, fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              DateFormat('dd-MM-yyyy').format(donor.createdAt),
+                              style: TextStyle(
+                                  fontSize: 15.sp, fontWeight: FontWeight.w500),
+                            ),
+                            onTap: () {
+                              Provider.of<ChatsProvider>(context, listen: false)
+                                  .fetchChats(donor.user);
+                              Navigator.pushNamed(context, '/donorChat',
+                                  arguments: donor);
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 );
               },

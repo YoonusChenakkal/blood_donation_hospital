@@ -1,9 +1,7 @@
 import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Providers/userProfileProvider.dart';
 import 'package:blood_donation_hospital/widgets/customButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -98,10 +96,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   logout(BuildContext context) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-
-    authProvider.reset();
-
+  Provider.of<AuthProvider>(context, listen: false).reset();
 
 
     Navigator.pushNamedAndRemoveUntil(

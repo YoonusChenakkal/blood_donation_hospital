@@ -1,20 +1,25 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
+import 'package:blood_donation_hospital/Models/campRegistrationsModel.dart';
+import 'package:blood_donation_hospital/Models/campsModel.dart';
 import 'package:blood_donation_hospital/Providers/authProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CampaignProvider with ChangeNotifier {
-  String? hospitalName;
   String? location;
   String? description;
   DateTime? selectedDate;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
+  List<CampsModel> camp = [];
+  List<CampsModel> filteredCamps = [];
+  List<CampRegistrationsModel> campRegistrations = [];
+  String? errorMessage;
 
-  void setHospitalName(String value) {
-    hospitalName = value;
-    notifyListeners();
-  }
+  bool isLoading = false;
 
   void setLocation(String value) {
     location = value;
@@ -42,9 +47,7 @@ class CampaignProvider with ChangeNotifier {
   }
 
   bool isFormValid() {
-    return hospitalName != null &&
-        hospitalName!.isNotEmpty &&
-        location != null &&
+    return location != null &&
         location!.isNotEmpty &&
         description != null &&
         description!.isNotEmpty &&
@@ -54,7 +57,6 @@ class CampaignProvider with ChangeNotifier {
   }
 
   void clearForm() {
-    hospitalName = null;
     location = null;
     description = null;
     selectedDate = null;
@@ -65,12 +67,12 @@ class CampaignProvider with ChangeNotifier {
 
   Future<void> registerCampaign(
     BuildContext context,
-    AuthProvider authProvider,
   ) async {
     final url = Uri.parse(
         'https://lifeproject.pythonanywhere.com/hospital/hospital/blood-donation-camps/');
 
-    authProvider.isLoading = true; // Start loading state
+    isLoading = true;
+    notifyListeners(); 
     try {
       // Format date as "yyyy-MM-dd"
       final formattedDate = selectedDate != null
@@ -89,14 +91,8 @@ class CampaignProvider with ChangeNotifier {
       final formattedStartTime = formatTimeOfDay(startTime);
       final formattedEndTime = formatTimeOfDay(endTime);
 
-      if (hospitalName == null ||
-          location == null ||
-          description == null ||
-          formattedDate.isEmpty ||
-          formattedStartTime.isEmpty ||
-          formattedEndTime.isEmpty) {
-        throw Exception("One or more required fields are null");
-      }
+      final prefs = await SharedPreferences.getInstance();
+      String? hospitalName = prefs.getString('hospitalName');
 
       final response = await http.post(
         url,
@@ -117,13 +113,10 @@ class CampaignProvider with ChangeNotifier {
           content: Text(data['message'] ?? 'Campaign registered successfully!'),
           duration: const Duration(seconds: 2),
         ));
-        clearForm();
 
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/bottomNavigationBar',
-          (route) => false,
-        );
+        fetchCamps(context);
+        clearForm();
+        Navigator.pop(context);
       } else if (response.statusCode == 400) {
         final data = jsonDecode(response.body);
         String errorMessage = data['detail'] ??
@@ -142,7 +135,199 @@ class CampaignProvider with ChangeNotifier {
         duration: const Duration(seconds: 2),
       ));
     } finally {
-      authProvider.isLoading = false;
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  fetchCamps(BuildContext context) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://lifeproject.pythonanywhere.com/hospital/hospital/blood-donation-camps/'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        camp.clear(); // Clear the existing camps
+        final prefs = await SharedPreferences.getInstance();
+        String? hospitalName = prefs.getString('hospitalName');
+        camp = List<CampsModel>.from(data.map((x) => CampsModel.fromJson(x)));
+        filteredCamps =
+            camp.where((camp) => camp.hospital == hospitalName).toList();
+      } else {
+        errorMessage =
+            'Failed to load camps. Server returned ${response.statusCode}';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(errorMessage!),
+          duration: const Duration(seconds: 2),
+        ));
+      }
+    } on SocketException {
+      errorMessage = 'No Internet connection. Please try again later.';
+    } catch (error) {
+      errorMessage = 'Failed to fetch camps: ${error.toString()}';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  fetchRegistrations(
+    int? campId,
+    BuildContext context,
+  ) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://lifeproject.pythonanywhere.com/hospital/camps/${campId}/donors/'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        campRegistrations.clear(); // Clear the existing camps
+
+        final parsedCampRegistration = CampRegistrationsModel.fromJson(data);
+
+        campRegistrations.add(parsedCampRegistration);
+      } else {
+        errorMessage =
+            'Failed to load camps. Server returned ${response.statusCode}';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(errorMessage!),
+          duration: const Duration(seconds: 2),
+        ));
+      }
+    } on SocketException {
+      errorMessage = 'No Internet connection. Please try again later.';
+    } catch (error) {
+      errorMessage = 'Failed to fetch camps: ${error.toString()}';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  deleteCamp(
+    int? campId,
+    BuildContext context,
+  ) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    String? hospitalName = prefs.getString('hospitalName');
+
+    try {
+      final response = await http.delete(
+        Uri.parse(
+            'https://lifeproject.pythonanywhere.com/hospital/hospital/blood-donation-camps/$hospitalName/$campId/'),
+      );
+
+      if (response.statusCode == 204) {
+        fetchCamps(context);
+        Navigator.pop(context);
+      } else {
+        errorMessage = 'Failed to Delete ${response.statusCode}';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(errorMessage!),
+          duration: const Duration(seconds: 2),
+        ));
+      }
+    } on SocketException {
+      errorMessage = 'No Internet connection. Please try again later.';
+    } catch (error) {
+      errorMessage = 'Failed to Delete: ${error.toString()}';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  editCamp(
+    int? campId,
+    BuildContext context,
+  ) async {
+    isLoading = true;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    String? hospitalName = prefs.getString('hospitalName');
+
+    final url = Uri.parse(
+        'https://lifeproject.pythonanywhere.com/hospital/hospital/blood-donation-camps/$hospitalName/$campId/');
+    isLoading = true;
+    try {
+      // Format date as "yyyy-MM-dd"
+      final formattedDate = selectedDate != null
+          ? '${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}'
+          : '';
+
+      // Format time as "HH:mm:ss.SSSSSS"
+      String formatTimeOfDay(TimeOfDay? time) {
+        if (time == null) return '';
+        final now = DateTime.now();
+        final dateTime =
+            DateTime(now.year, now.month, now.day, time.hour, time.minute);
+        return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:00.000000';
+      }
+
+      final formattedStartTime = formatTimeOfDay(startTime);
+      final formattedEndTime = formatTimeOfDay(endTime);
+
+      final prefs = await SharedPreferences.getInstance();
+      String? hospitalName = prefs.getString('hospitalName');
+
+      final response = await http.put(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'hospital': hospitalName ?? '',
+          'date': formattedDate,
+          'location': location ?? '',
+          'start_time': formattedStartTime,
+          'end_time': formattedEndTime,
+          'description': description ?? '',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Campaign Updated successfully!'),
+          duration: Duration(seconds: 2),
+        ));
+
+        fetchCamps(context);
+        clearForm();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/bottomNavigationBar',
+          (route) => false,
+        );
+      } else {
+        String errorMessage = 'Camp Does Not Exist';
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(errorMessage),
+          duration: const Duration(seconds: 2),
+        ));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+        duration: const Duration(seconds: 2),
+      ));
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 }

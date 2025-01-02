@@ -80,7 +80,7 @@ class Register extends StatelessWidget {
                       keyboardType: TextInputType.name,
                       icon: FontAwesomeIcons.hospital,
                       onChanged: (value) {
-                        authProvider.name = value;
+                        authProvider.name = value.trim();
                       },
                       enabled: authProvider.showOtpField ? false : true,
                     ),
@@ -93,7 +93,7 @@ class Register extends StatelessWidget {
                       icon: Icons.email_outlined,
                       enabled: authProvider.showOtpField ? false : true,
                       onChanged: (value) {
-                        authProvider.email = value;
+                        authProvider.email = value.trim();
                       },
                     ),
                     SizedBox(
@@ -105,7 +105,7 @@ class Register extends StatelessWidget {
                       icon: Icons.phone_in_talk_outlined,
                       enabled: authProvider.showOtpField ? false : true,
                       onChanged: (value) {
-                        authProvider.phone = value;
+                        authProvider.phone = value.trim();
                       },
                     ),
                     SizedBox(
@@ -117,7 +117,7 @@ class Register extends StatelessWidget {
                       icon: Icons.place_outlined,
                       enabled: authProvider.showOtpField ? false : true,
                       onChanged: (value) {
-                        authProvider.address = value;
+                        authProvider.address = value.trim();
                       },
                     ),
 
@@ -131,7 +131,7 @@ class Register extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         icon: Icons.lock,
                         onChanged: (data) {
-                          authProvider.otp = data;
+                          authProvider.otp = data.trim();
                         },
                       ),
                     ],
@@ -141,6 +141,7 @@ class Register extends StatelessWidget {
                     // Submit Button
                     CustomButton(
                       text: authProvider.showOtpField ? 'Register' : 'Submit',
+                      isLoading:authProvider.isLoading ,
                       onPressed: authProvider.showOtpField
                           ? () {
                               if (authProvider.otp!.isEmpty ||

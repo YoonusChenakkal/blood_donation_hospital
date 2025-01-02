@@ -1,11 +1,11 @@
 import 'package:blood_donation_hospital/Providers/authProvider.dart';
 import 'package:blood_donation_hospital/Providers/tabIndexNotifier.dart';
+import 'package:blood_donation_hospital/Screens/SheduledCamp.dart';
 import 'package:blood_donation_hospital/Screens/donorList.dart';
 import 'package:blood_donation_hospital/Screens/shedule.dart';
 import 'package:blood_donation_hospital/Screens/home.dart';
 import 'package:blood_donation_hospital/Screens/profile.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
             final screens = [
               const HomePage(),
               const ShedulePage(),
-               DonorListPage(),
+              const SheduledCamp(),
+              const DonorListPage(),
               const ProfilePage(),
             ];
 
@@ -67,6 +68,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
                         size: 20.sp,
                       ),
                       label: 'Shedules',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.campaign_outlined,
+                        size: 20.sp,
+                      ),
+                      label: 'Camp',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(

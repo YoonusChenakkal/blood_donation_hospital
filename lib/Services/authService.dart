@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:blood_donation_hospital/Providers/authProvider.dart';
+import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
+import 'package:blood_donation_hospital/Providers/donorProvider.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -82,10 +85,14 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        final hospitalName = data['hospital'];
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('hospitalName', hospitalName);
         final message = data['message'];
 
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString('uniqueId', 'Registered');
+        Provider.of<CampaignProvider>(context, listen: false)
+            .fetchCamps(context);
+        Provider.of<DonorProvider>(context, listen: false).loadDonors();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
@@ -185,10 +192,14 @@ class AuthService {
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final message = data['message'];
-
+        final hospitalName = data['hospital'];
         final prefs = await SharedPreferences.getInstance();
-        prefs.setString('uniqueId', 'LogedIn');
+        prefs.setString('hospitalName', hospitalName);
+
+        final message = data['message'];
+        Provider.of<CampaignProvider>(context, listen: false)
+            .fetchCamps(context);
+        Provider.of<DonorProvider>(context, listen: false).loadDonors();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),

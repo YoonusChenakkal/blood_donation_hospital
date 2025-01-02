@@ -1,3 +1,4 @@
+import 'package:blood_donation_hospital/Models/campsModel.dart';
 import 'package:blood_donation_hospital/Providers/authProvider.dart';
 import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
 import 'package:blood_donation_hospital/widgets/customButton.dart';
@@ -6,14 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class RegisterCampaign extends StatelessWidget {
-  const RegisterCampaign({super.key});
+class EditCampDetails extends StatelessWidget {
+  const EditCampDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
     final campaignProvider = Provider.of<CampaignProvider>(context);
-
-    Future<void> _pickDate(BuildContext context) async {
+  final CampsModel filteredCamp =
+        ModalRoute.of(context)!.settings.arguments as CampsModel;
+   
+   
+   
+   _pickDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -25,7 +30,7 @@ class RegisterCampaign extends StatelessWidget {
       }
     }
 
-    Future<void> _pickTime(BuildContext context,
+     _pickTime(BuildContext context,
         {required bool isStartTime}) async {
       final TimeOfDay? picked = await showTimePicker(
         context: context,
@@ -96,7 +101,7 @@ class RegisterCampaign extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Register Campaign',
+                        'Edit Campaign Details',
                         style: TextStyle(
                           fontSize: 23.sp,
                           color: Colors.white,
@@ -161,9 +166,9 @@ class RegisterCampaign extends StatelessWidget {
                         keyboardType: TextInputType.multiline),
                     SizedBox(height: 4.5.h),
                     CustomButton(
-                      text: 'Submit',
-                      isLoading: campaignProvider.isLoading,
+                      text: 'Submit',isLoading: campaignProvider.isLoading,
                       onPressed: () {
+                       
                         if (!campaignProvider.isFormValid()) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -171,7 +176,8 @@ class RegisterCampaign extends StatelessWidget {
                             ),
                           );
                         } else {
-                          campaignProvider.registerCampaign(context);
+                          campaignProvider.editCamp(
+                              filteredCamp.id, context);
                         }
                       },
                       buttonType: ButtonType.Outlined,

@@ -78,7 +78,7 @@ class Login extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       icon: Icons.email,
                       onChanged: (value) {
-                        authProvider.email = value;
+                        authProvider.email = value.trim();
                       },
                     ),
                     if (authProvider.showOtpField) ...[ 
@@ -91,14 +91,14 @@ class Login extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         icon: Icons.lock,
                         onChanged: (data) {
-                          authProvider.otp = data;
+                          authProvider.otp = data.trim();
                         },
                       ),
                       SizedBox(height: 2.h),
                       GestureDetector(
                         onTap: () {
                           if (authProvider.isResendEnabled) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                               content: Text("OTP resent successfully!"),
                             ));
                             authProvider.startTimer();
@@ -121,6 +121,7 @@ class Login extends StatelessWidget {
                     ),
                     CustomButton(
                       text: authProvider.showOtpField ? 'Login' : 'Submit',
+                      isLoading: authProvider.isLoading,
                       onPressed: () {
                         if (authProvider.email == null ||
                             authProvider.email!.isEmpty) {
