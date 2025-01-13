@@ -1,8 +1,7 @@
-import 'package:blood_donation_hospital/Models/campsModel.dart';
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
-import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/customTextfield.dart';
+import 'package:Life_Connect/Models/campsModel.dart';
+import 'package:Life_Connect/Providers/campaignProvider.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/customTextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -13,12 +12,10 @@ class EditCampDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final campaignProvider = Provider.of<CampaignProvider>(context);
-  final CampsModel filteredCamp =
+    final CampsModel filteredCamp =
         ModalRoute.of(context)!.settings.arguments as CampsModel;
-   
-   
-   
-   _pickDate(BuildContext context) async {
+
+    _pickDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -30,8 +27,7 @@ class EditCampDetails extends StatelessWidget {
       }
     }
 
-     _pickTime(BuildContext context,
-        {required bool isStartTime}) async {
+    _pickTime(BuildContext context, {required bool isStartTime}) async {
       final TimeOfDay? picked = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),
@@ -45,15 +41,35 @@ class EditCampDetails extends StatelessWidget {
       }
     }
 
-    String _formatDate(DateTime? date) {
-      if (date == null) return 'Select Date';
-      return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    TimeOfDay? parseTime(String? time) {
+      if (time == null || time.isEmpty) return null;
+      final parts = time.split(':');
+      if (parts.length != 2) return null;
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+      if (hour == null || minute == null) return null;
+      return TimeOfDay(hour: hour, minute: minute);
     }
 
-    String _formatTime(TimeOfDay? time, {required bool isStartTime}) {
-      if (time == null) return isStartTime ? 'Start Time' : 'End Time';
-      return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+    String formatDate(DateTime? date) {
+      if (date == null) return 'Select Date';
+      return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year.toString().substring(2)}';
     }
+
+    String formatTime(TimeOfDay? time, {required bool isStartTime}) {
+      if (time == null) return isStartTime ? 'Start Time' : 'End Time';
+
+      // Convert to 12-hour format with AM/PM
+      final hour =
+          time.hour > 12 ? time.hour - 12 : (time.hour == 0 ? 12 : time.hour);
+      final period = time.hour >= 12 ? 'PM' : 'AM';
+      final minute = time.minute.toString().padLeft(2, '0');
+
+      return '$hour:$minute $period';
+    }
+
+    print('Start Time: ${filteredCamp.startTime}');
+    print('End Time: ${filteredCamp.endTime}');
 
     return WillPopScope(
       onWillPop: () async {
@@ -101,7 +117,7 @@ class EditCampDetails extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Edit Campaign Details',
+                        'Edit Camp',
                         style: TextStyle(
                           fontSize: 23.sp,
                           color: Colors.white,
@@ -110,7 +126,7 @@ class EditCampDetails extends StatelessWidget {
                       ),
                     ),
                     CustomTextfield(
-                        hintText: 'Location',
+                        hintText: filteredCamp.location ?? 'Location',
                         icon: Icons.place_outlined,
                         onChanged: (value) =>
                             campaignProvider.setLocation(value),
@@ -120,7 +136,7 @@ class EditCampDetails extends StatelessWidget {
                       onTap: () => _pickDate(context),
                       child: CustomTextfield(
                           enabled: false,
-                          hintText: _formatDate(campaignProvider.selectedDate),
+                          hintText: formatDate(campaignProvider.selectedDate),
                           icon: Icons.date_range_outlined,
                           onChanged: (value) {},
                           keyboardType: TextInputType.none),
@@ -132,9 +148,9 @@ class EditCampDetails extends StatelessWidget {
                         InkWell(
                           onTap: () => _pickTime(context, isStartTime: true),
                           child: CustomTextfield(
-                            width: 35,
+                            width: 40,
                             enabled: false,
-                            hintText: _formatTime(campaignProvider.startTime,
+                            hintText: formatTime(campaignProvider.startTime,
                                 isStartTime: true),
                             icon: Icons.access_time_rounded,
                             onChanged: (value) {},
@@ -145,10 +161,13 @@ class EditCampDetails extends StatelessWidget {
                         InkWell(
                           onTap: () => _pickTime(context, isStartTime: false),
                           child: CustomTextfield(
-                            width: 35,
+                            width: 40,
                             enabled: false,
-                            hintText: _formatTime(campaignProvider.endTime,
-                                isStartTime: false),
+                            hintText: campaignProvider.endTime == null
+                                ? formatTime(parseTime(filteredCamp.endTime),
+                                    isStartTime: false)
+                                : formatTime(campaignProvider.endTime,
+                                    isStartTime: false),
                             icon: Icons.access_time_outlined,
                             onChanged: (value) {},
                             keyboardType: TextInputType.none,
@@ -159,27 +178,17 @@ class EditCampDetails extends StatelessWidget {
                     SizedBox(height: 2.h),
                     CustomTextfield(
                         height: 7.5,
-                        hintText: 'Description',
+                        hintText: filteredCamp.description ?? 'Description',
                         icon: Icons.notes,
                         onChanged: (value) =>
                             campaignProvider.setDescription(value),
                         keyboardType: TextInputType.multiline),
                     SizedBox(height: 4.5.h),
                     CustomButton(
-                      text: 'Submit',isLoading: campaignProvider.isLoading,
-                      onPressed: () {
-                       
-                        if (!campaignProvider.isFormValid()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill out all fields'),
-                            ),
-                          );
-                        } else {
-                          campaignProvider.editCamp(
-                              filteredCamp.id, context);
-                        }
-                      },
+                      text: 'Submit',
+                      isLoading: campaignProvider.isLoading,
+                      onPressed: () =>
+                          campaignProvider.editCamp(filteredCamp.id, context),
                       buttonType: ButtonType.Outlined,
                     ),
                     SizedBox(height: 2.h),

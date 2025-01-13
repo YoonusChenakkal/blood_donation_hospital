@@ -1,8 +1,7 @@
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Services/authService.dart';
-import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/customDropdown.dart';
-import 'package:blood_donation_hospital/widgets/customTextfield.dart';
+import 'package:Life_Connect/Providers/authProvider.dart';
+import 'package:Life_Connect/Services/authService.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/customTextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';

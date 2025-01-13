@@ -1,10 +1,10 @@
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Providers/tabIndexNotifier.dart';
-import 'package:blood_donation_hospital/Screens/SheduledCamp.dart';
-import 'package:blood_donation_hospital/Screens/donorList.dart';
-import 'package:blood_donation_hospital/Screens/shedule.dart';
-import 'package:blood_donation_hospital/Screens/home.dart';
-import 'package:blood_donation_hospital/Screens/profile.dart';
+import 'package:Life_Connect/Providers/authProvider.dart';
+import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
+import 'package:Life_Connect/Screens/SheduledCamp.dart';
+import 'package:Life_Connect/Screens/chat.dart';
+import 'package:Life_Connect/Screens/donorList.dart';
+import 'package:Life_Connect/Screens/home.dart';
+import 'package:Life_Connect/Screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
@@ -26,8 +26,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
           builder: (context, tabIndexNotifier, child) {
             final screens = [
               const HomePage(),
-              const ShedulePage(),
-              const SheduledCamp(),
+              const ChatsPage(),
+              const Scheduledcamps(),
               const DonorListPage(),
               const ProfilePage(),
             ];
@@ -41,7 +41,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         bottomNavigationBar: Consumer<TabIndexNotifier>(
           builder: (context, tabIndexNotifier, child) {
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
+              padding: EdgeInsets.only(right: 3.5.w, left: 3.5.w, top: 1.h),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: BottomNavigationBar(
@@ -64,10 +64,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(
-                        Icons.schedule,
+                        Icons.message_outlined,
                         size: 20.sp,
                       ),
-                      label: 'Shedules',
+                      label: 'chat',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(

@@ -1,5 +1,5 @@
-name: blood_donation_hospital
-description: "A new Flutter project."
+name: Life_Connect
+description: "Blood Donation App for Hospital."
 publish_to: 'none'
 version: 0.1.0
 
@@ -10,12 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.8.0
+  google_fonts: ^6.2.1
   http: ^1.2.2
   image_picker: ^1.1.2
   intl: ^0.20.1
   provider: ^6.1.2
   shared_preferences: ^2.3.3
   sizer: ^3.0.4
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_lints: ^4.0.0
@@ -24,3 +26,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/

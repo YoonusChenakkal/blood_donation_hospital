@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
-import 'package:blood_donation_hospital/Providers/donorProvider.dart';
+import 'package:Life_Connect/Providers/authProvider.dart';
+import 'package:Life_Connect/Providers/campaignProvider.dart';
+import 'package:Life_Connect/Providers/donorProvider.dart';
+import 'package:Life_Connect/Providers/profileProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -93,6 +94,8 @@ class AuthService {
         Provider.of<CampaignProvider>(context, listen: false)
             .fetchCamps(context);
         Provider.of<DonorProvider>(context, listen: false).loadDonors();
+        await Provider.of<ProfileProvider>(context, listen: false)
+            .fetchHospitalProfile();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
@@ -200,6 +203,8 @@ class AuthService {
         Provider.of<CampaignProvider>(context, listen: false)
             .fetchCamps(context);
         Provider.of<DonorProvider>(context, listen: false).loadDonors();
+        await Provider.of<ProfileProvider>(context, listen: false)
+            .fetchHospitalProfile();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),

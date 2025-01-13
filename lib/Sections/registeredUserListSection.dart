@@ -1,8 +1,7 @@
-import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
-import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/infoCard.dart';
+import 'package:Life_Connect/Providers/campaignProvider.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -77,15 +76,50 @@ class userRegisteredListSection extends StatelessWidget {
               itemBuilder: (context, index) {
                 final registeredUserList =
                     campsProvider.campRegistrations[0].registrations[index];
-                return InfoCard(
-                  title: registeredUserList.username,
-                  address: registeredUserList.address,
-                  contactNumber: registeredUserList.contactNumber.toString(),
-                  date: DateFormat('dd-MM-yyyy')
-                      .format(registeredUserList.registrationDate),
-                  badgeText: registeredUserList.bloodGroup,
-                  type: InfoCardType.camp,
-                );
+                return Container(
+      margin: EdgeInsets.symmetric(horizontal: 3.5.w, vertical: .6.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.red, width: 1.4),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 3,
+            color: Color.fromARGB(90, 0, 0, 0),
+            offset: Offset(2, 1),
+          ),
+        ],
+      ),
+      child: ListTile(
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            color: Colors.red,
+          ),
+          child: Text(
+            registeredUserList.bloodGroup,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+            ),
+          ),
+        ),
+        title: Text(
+          registeredUserList.username,
+          style: GoogleFonts.nunitoSans(
+            fontSize: 17.sp,
+            color: Colors.red,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        subtitle: Text(
+         registeredUserList. address,
+          style: GoogleFonts.roboto(),
+        ),
+      ),
+    );
               },
             ),
           );

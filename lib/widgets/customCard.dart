@@ -1,55 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomCard extends StatelessWidget {
-  String title;
-  String number;
-  IconData icon;
-  CustomCard(
+  final String title;
+  final String? count;
+  final Image image;
+
+  const CustomCard(
       {super.key,
       required this.title,
-      required this.number,
-      required this.icon});
+      required this.count,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 10.5.h,
-      height: 10.5.h,
+      width: 27.w,
+      height: 13.h,
+      padding: const EdgeInsets.all(6.0),
       decoration: BoxDecoration(
-        color: Colors.red[50],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13.sp,
-                  color: Colors.black),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  number,
-                  style:
-                      TextStyle(fontWeight: FontWeight.w900, fontSize: 19.sp),
-                ),
-                Icon(
-                  icon,
-                  color: Colors.red,
-                  size: 17.sp,
-                )
-              ],
-            )
-          ],
-        ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: Colors.red,
+          )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14.sp,
+                color: Colors.black),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                count ?? '0',
+                style: GoogleFonts.dosis(
+                    fontWeight: FontWeight.w800, fontSize: 21.sp),
+              ),
+              image
+            ],
+          )
+        ],
       ),
     );
   }

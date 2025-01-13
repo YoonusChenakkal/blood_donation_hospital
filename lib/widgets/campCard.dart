@@ -1,13 +1,11 @@
-import 'package:blood_donation_hospital/Models/campsModel.dart';
-import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
-
+import 'package:Life_Connect/Models/campsModel.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class Campcard extends StatelessWidget {
-  const Campcard({
+class CampCard extends StatelessWidget {
+  const CampCard({
     super.key,
     required this.filteredCamp,
   });
@@ -15,100 +13,71 @@ class Campcard extends StatelessWidget {
 
   String formatDate(DateTime? date) {
     if (date == null) return 'Unknown Date';
-    return DateFormat('MMMM d, yyyy').format(date); // Example: January 9, 2025
+    return DateFormat('MMMM d, yyyy').format(date);
   }
 
   String formatTime(String? time) {
     if (time == null) return 'Unknown Time';
     try {
       final parsedTime = DateFormat("HH:mm:ss").parse(time);
-      return DateFormat("h:mm a").format(parsedTime); // Example: 10:00 AM
+      return DateFormat("h:mm a").format(parsedTime);
     } catch (e) {
       return 'Invalid Time';
     }
   }
 
-  String formatCreatedAt(DateTime? date) {
-    return date != null
-        ? DateFormat('MMMM d, yyyy').format(date)
-        : 'Unknown Date';
-  }
-
   @override
   Widget build(BuildContext context) {
-  
-
     return GestureDetector(
       onTap: () => Navigator.pushNamed(
         context,
         '/campDetails',
-        arguments: filteredCamp, // Passing the camp object
+        arguments: filteredCamp,
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 5.w),
-        width: double.infinity,
+        margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.w),
+        padding: EdgeInsets.all(3.w),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           color: Colors.white,
-          border: Border.all(color: Colors.red, width: 1.4),
-          boxShadow: const [
+          border: Border.all(color: Colors.red, width: 1),
+          boxShadow: [
             BoxShadow(
-                blurRadius: 8,
-                color: Color.fromARGB(90, 0, 0, 0),
-                offset: Offset(2, 1))
+              blurRadius: 6,
+              color: Colors.grey.withOpacity(0.3),
+              offset: Offset(2, 2),
+            ),
           ],
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Positioned(
-              bottom: 1.h,
-              right: 2.w,
-              child: Text(
-                formatCreatedAt(filteredCamp.createdAt),
-                style: TextStyle(fontSize: 13.sp, color: Colors.black),
+            Text(
+              'Location : ${filteredCamp.location}',
+              style: GoogleFonts.nunitoSans(
+                fontSize: 17.5.sp,
+                fontWeight: FontWeight.w800,
+                color: Colors.red,
               ),
             ),
+            SizedBox(height: 1.h),
+            Text(
+              'Date : ${formatDate(filteredCamp.date)}',
+              style: GoogleFonts.roboto(
+                  fontSize: 15.sp, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(height: 0.5.h),
+            Text(
+              'Time : ${formatTime(filteredCamp.startTime)} - ${formatTime(filteredCamp.endTime)}',
+              style: GoogleFonts.roboto(
+                  fontSize: 15.sp, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(height: 1.h),
             Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                margin: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.red,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    filteredCamp.hospital ?? 'No Hospital Name',
-                    style: TextStyle(fontSize: 15.3.sp, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Date: ${formatDate(filteredCamp.date)}',
-                    style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: .7.h),
-                  Text(
-                    'Time: ${formatTime(filteredCamp.startTime)} - ${formatTime(filteredCamp.endTime)}',
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: .5.h),
-                  Text(
-                    'Location: ${filteredCamp.location ?? 'Unknown Location'}',
-                    style:
-                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(height: .5.h),
-                ],
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Posted on: ${formatDate(filteredCamp.createdAt)}',
+                style: TextStyle(fontSize: 12.sp, color: Colors.grey),
               ),
             ),
           ],

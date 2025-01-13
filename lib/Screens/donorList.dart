@@ -1,8 +1,8 @@
-import 'package:blood_donation_hospital/Providers/donorProvider.dart';
-import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/infoCard.dart';
+import 'package:Life_Connect/Providers/donorProvider.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/donorCard.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -33,25 +33,27 @@ class DonorListPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 8.h,
         backgroundColor: Colors.white,
         title: Text(
           'Donor List',
-          style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w600),
+          style:
+              GoogleFonts.aBeeZee(fontSize: 23.sp, fontWeight: FontWeight.w600),
         ),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'donors Chat', // Assign a unique tag
+      // floatingActionButton: FloatingActionButton(
+      //   heroTag: 'donors Chat', // Assign a unique tag
 
-        //  shape: CircleBorder(),
-        backgroundColor: Colors.red,
-        onPressed: () => Navigator.pushNamed(context, '/chat'),
-        child: const Icon(
-          Icons.chat,
-          color: Colors.white,
-        ),
-      ),
+      //   //  shape: CircleBorder(),
+      //   backgroundColor: Colors.red,
+      //   onPressed: () => Navigator.pushNamed(context, '/chat'),
+      //   child: const Icon(
+      //     Icons.chat,
+      //     color: Colors.white,
+      //   ),
+      // ),
       body: Column(
         children: [
           Row(
@@ -59,12 +61,13 @@ class DonorListPage extends StatelessWidget {
             children: [
               SizedBox(
                 height: 5.h,
-                width: 75.w,
+                width: 78.w,
                 child: SearchBar(
                   onChanged: (query) =>
                       Provider.of<DonorProvider>(context, listen: false)
                           .searchDonors(query),
-                  backgroundColor: WidgetStatePropertyAll(Colors.red[50]),
+                  backgroundColor: const WidgetStatePropertyAll(
+                      Color.fromARGB(255, 243, 243, 243)),
                   leading: Icon(Icons.search),
                   hintText: 'Search',
                   shape: WidgetStatePropertyAll(RoundedRectangleBorder(
@@ -93,6 +96,9 @@ class DonorListPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          SizedBox(
+            height: 1.h,
           ),
           Expanded(
             child: Consumer<DonorProvider>(
@@ -176,13 +182,9 @@ class DonorListPage extends StatelessWidget {
                     itemCount: donorProvider.filteredDonors.length,
                     itemBuilder: (context, index) {
                       final donor = donorProvider.filteredDonors[index];
-                      return InfoCard(
-                        title: donor.user,
-                        address: donor.address,
-                        contactNumber: donor.contactNumber.toString(),
-                        date: DateFormat('dd-MM-yyyy').format(donor.createdAt),
-                        badgeText: donor.bloodGroup,
-                        type: InfoCardType.donor,
+
+                      return DonorCard(
+                        donor: donor,
                       );
                     },
                   ),

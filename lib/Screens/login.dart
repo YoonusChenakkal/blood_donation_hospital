@@ -1,10 +1,10 @@
-import 'package:blood_donation_hospital/Services/authService.dart';
+import 'package:Life_Connect/Services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/customTextfield.dart';
+import 'package:Life_Connect/Providers/authProvider.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/customTextfield.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -74,7 +74,7 @@ class Login extends StatelessWidget {
                     ),
                     CustomTextfield(
                       enabled: !authProvider.showOtpField,
-                      hintText: 'Enter Your Email',
+                      hintText: 'Email',
                       keyboardType: TextInputType.emailAddress,
                       icon: Icons.email,
                       onChanged: (value) {

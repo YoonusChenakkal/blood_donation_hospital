@@ -7,6 +7,7 @@ class DonorModel {
   final int contactNumber;
   final String address;
   final String idProof;
+  final String? profileImage; // Nullable as not all donors have a profile image
   final String bloodGroup;
   final bool willingToDonateOrgan;
   final dynamic organsToDonate;
@@ -20,6 +21,7 @@ class DonorModel {
     required this.contactNumber,
     required this.address,
     required this.idProof,
+    this.profileImage, // Nullable field
     required this.bloodGroup,
     required this.willingToDonateOrgan,
     required this.organsToDonate,
@@ -34,6 +36,7 @@ class DonorModel {
         contactNumber: json["contact_number"],
         address: json["address"],
         idProof: json["id_proof"],
+        profileImage: json["profile_image"], // Parse the profile image
         bloodGroup: json["blood_group"],
         willingToDonateOrgan: json["willing_to_donate_organ"],
         organsToDonate: json["organs_to_donate"],
@@ -48,6 +51,7 @@ class DonorModel {
         "contact_number": contactNumber,
         "address": address,
         "id_proof": idProof,
+        "profile_image": profileImage, // Include the profile image in JSON
         "blood_group": bloodGroup,
         "willing_to_donate_organ": willingToDonateOrgan,
         "organs_to_donate": organsToDonate,

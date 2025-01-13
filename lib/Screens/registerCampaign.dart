@@ -1,7 +1,6 @@
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
-import 'package:blood_donation_hospital/widgets/customButton.dart';
-import 'package:blood_donation_hospital/widgets/customTextfield.dart';
+import 'package:Life_Connect/Providers/campaignProvider.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/customTextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -40,14 +39,21 @@ class RegisterCampaign extends StatelessWidget {
       }
     }
 
-    String _formatDate(DateTime? date) {
+    String formatDate(DateTime? date) {
       if (date == null) return 'Select Date';
-      return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+      return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year.toString().substring(2)}';
     }
 
-    String _formatTime(TimeOfDay? time, {required bool isStartTime}) {
+    String formatTime(TimeOfDay? time, {required bool isStartTime}) {
       if (time == null) return isStartTime ? 'Start Time' : 'End Time';
-      return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+
+      // Convert to 12-hour format with AM/PM
+      final hour =
+          time.hour > 12 ? time.hour - 12 : (time.hour == 0 ? 12 : time.hour);
+      final period = time.hour >= 12 ? 'PM' : 'AM';
+      final minute = time.minute.toString().padLeft(2, '0');
+
+      return '$hour:$minute $period';
     }
 
     return WillPopScope(
@@ -115,7 +121,7 @@ class RegisterCampaign extends StatelessWidget {
                       onTap: () => _pickDate(context),
                       child: CustomTextfield(
                           enabled: false,
-                          hintText: _formatDate(campaignProvider.selectedDate),
+                          hintText: formatDate(campaignProvider.selectedDate),
                           icon: Icons.date_range_outlined,
                           onChanged: (value) {},
                           keyboardType: TextInputType.none),
@@ -127,9 +133,9 @@ class RegisterCampaign extends StatelessWidget {
                         InkWell(
                           onTap: () => _pickTime(context, isStartTime: true),
                           child: CustomTextfield(
-                            width: 35,
+                            width: 40,
                             enabled: false,
-                            hintText: _formatTime(campaignProvider.startTime,
+                            hintText: formatTime(campaignProvider.startTime,
                                 isStartTime: true),
                             icon: Icons.access_time_rounded,
                             onChanged: (value) {},
@@ -140,9 +146,9 @@ class RegisterCampaign extends StatelessWidget {
                         InkWell(
                           onTap: () => _pickTime(context, isStartTime: false),
                           child: CustomTextfield(
-                            width: 35,
+                            width: 40,
                             enabled: false,
-                            hintText: _formatTime(campaignProvider.endTime,
+                            hintText: formatTime(campaignProvider.endTime,
                                 isStartTime: false),
                             icon: Icons.access_time_outlined,
                             onChanged: (value) {},
@@ -153,12 +159,14 @@ class RegisterCampaign extends StatelessWidget {
                     ),
                     SizedBox(height: 2.h),
                     CustomTextfield(
-                        height: 7.5,
+                        height: 9,
                         hintText: 'Description',
                         icon: Icons.notes,
                         onChanged: (value) =>
                             campaignProvider.setDescription(value),
-                        keyboardType: TextInputType.multiline),
+                        keyboardType: TextInputType.multiline,
+                        minLines: 3,
+                        maxLines: null),
                     SizedBox(height: 4.5.h),
                     CustomButton(
                       text: 'Submit',

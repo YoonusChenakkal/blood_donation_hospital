@@ -1,4 +1,4 @@
-import 'package:blood_donation_hospital/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -73,9 +73,9 @@ class ShedulePage extends StatelessWidget {
                               fontSize: 14.5.sp, fontWeight: FontWeight.w500),
                         ),
                         trailing: CustomButton(
-                            height: 3,
+                            height: 4,
                             width: 22,
-                            text: 'View Details',
+                            text: ' View Details',
                             buttonType: ButtonType.Ovelshaped,
                             onPressed: () {})),
                   ),
@@ -93,9 +93,9 @@ class ShedulePage extends StatelessWidget {
                               fontSize: 14.5.sp, fontWeight: FontWeight.w500),
                         ),
                         trailing: CustomButton(
-                            height: 3,
+                            height: 4,
                             width: 22,
-                            text: 'View Details',
+                            text: ' View Details',
                             buttonType: ButtonType.Ovelshaped,
                             onPressed: () {})),
                   ),
@@ -127,9 +127,9 @@ class ShedulePage extends StatelessWidget {
                               fontSize: 14.5.sp, fontWeight: FontWeight.w500),
                         ),
                         trailing: CustomButton(
-                            height: 3,
+                            height: 4,
                             width: 22,
-                            text: 'View Details',
+                            text: ' View Details',
                             buttonType: ButtonType.Ovelshaped,
                             onPressed: () {})),
                   ),
@@ -147,9 +147,9 @@ class ShedulePage extends StatelessWidget {
                               fontSize: 14.5.sp, fontWeight: FontWeight.w500),
                         ),
                         trailing: CustomButton(
-                            height: 3,
+                            height: 4,
                             width: 22,
-                            text: 'View Details',
+                            text: ' View Details',
                             buttonType: ButtonType.Ovelshaped,
                             onPressed: () {})),
                   ),

@@ -1,4 +1,4 @@
-import 'package:blood_donation_hospital/widgets/customButton.dart';
+import 'package:Life_Connect/widgets/customButton.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 

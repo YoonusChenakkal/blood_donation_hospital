@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
-import 'package:blood_donation_hospital/Models/campRegistrationsModel.dart';
-import 'package:blood_donation_hospital/Models/campsModel.dart';
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
+import 'package:Life_Connect/Models/campRegistrationsModel.dart';
+import 'package:Life_Connect/Models/campsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,7 +70,7 @@ class CampaignProvider with ChangeNotifier {
         'https://lifeproject.pythonanywhere.com/hospital/hospital/blood-donation-camps/');
 
     isLoading = true;
-    notifyListeners(); 
+    notifyListeners();
     try {
       // Format date as "yyyy-MM-dd"
       final formattedDate = selectedDate != null
@@ -238,10 +236,6 @@ class CampaignProvider with ChangeNotifier {
         Navigator.pop(context);
       } else {
         errorMessage = 'Failed to Delete ${response.statusCode}';
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(errorMessage!),
-          duration: const Duration(seconds: 2),
-        ));
       }
     } on SocketException {
       errorMessage = 'No Internet connection. Please try again later.';
@@ -249,10 +243,16 @@ class CampaignProvider with ChangeNotifier {
       errorMessage = 'Failed to Delete: ${error.toString()}';
     } finally {
       isLoading = false;
+
       notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(errorMessage!),
+        duration: const Duration(seconds: 2),
+      ));
+      errorMessage = null;
     }
   }
-
+ 
   editCamp(
     int? campId,
     BuildContext context,
@@ -283,25 +283,21 @@ class CampaignProvider with ChangeNotifier {
       final formattedStartTime = formatTimeOfDay(startTime);
       final formattedEndTime = formatTimeOfDay(endTime);
 
-      final prefs = await SharedPreferences.getInstance();
-      String? hospitalName = prefs.getString('hospitalName');
-
-      final response = await http.put(
+      final response = await http.patch(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'hospital': hospitalName ?? '',
-          'date': formattedDate,
-          'location': location ?? '',
-          'start_time': formattedStartTime,
-          'end_time': formattedEndTime,
-          'description': description ?? '',
+          if (formattedDate.isNotEmpty) 'date': formattedDate,
+          if (location != null) 'location': location,
+          if (formattedStartTime.isNotEmpty) 'start_time': formattedStartTime,
+          if (formattedEndTime.isNotEmpty) 'end_time': formattedEndTime,
+          if (description != null) 'description': description,
         }),
       );
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Campaign Updated successfully!'),
+          content: Text('Camp Updated successfully!'),
           duration: Duration(seconds: 2),
         ));
 

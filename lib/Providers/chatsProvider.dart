@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:blood_donation_hospital/Models/chatModel.dart';
+import 'package:Life_Connect/Models/chatModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,8 +58,10 @@ class ChatsProvider extends ChangeNotifier {
           'content': content,
         }),
       );
+      print(hospitalName);
+      print(donorName);
 
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 201) {
         fetchChats(donorName);
         return 'Sent';

@@ -1,27 +1,33 @@
 import 'dart:async';
-import 'package:blood_donation_hospital/Providers/authProvider.dart';
-import 'package:blood_donation_hospital/Providers/campaignProvider.dart';
-import 'package:blood_donation_hospital/Providers/chatsProvider.dart';
-import 'package:blood_donation_hospital/Providers/donorProvider.dart';
-import 'package:blood_donation_hospital/Providers/tabIndexNotifier.dart';
-import 'package:blood_donation_hospital/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
-import 'package:blood_donation_hospital/Screens/campDetails.dart';
-import 'package:blood_donation_hospital/Screens/chat.dart';
-import 'package:blood_donation_hospital/Screens/donorChat.dart';
-import 'package:blood_donation_hospital/Screens/donorList.dart';
-import 'package:blood_donation_hospital/Screens/editCampDetails.dart';
-import 'package:blood_donation_hospital/Screens/registerCampaign.dart';
-import 'package:blood_donation_hospital/Screens/shedule.dart';
-import 'package:blood_donation_hospital/Screens/home.dart';
-import 'package:blood_donation_hospital/Screens/login.dart';
-import 'package:blood_donation_hospital/Screens/profile.dart';
-import 'package:blood_donation_hospital/Screens/register.dart';
-import 'package:blood_donation_hospital/Screens/welcomePage.dart';
-import 'package:blood_donation_hospital/Services/authService.dart';
+import 'package:Life_Connect/Providers/authProvider.dart';
+import 'package:Life_Connect/Providers/campaignProvider.dart';
+import 'package:Life_Connect/Providers/chatsProvider.dart';
+import 'package:Life_Connect/Providers/donorProvider.dart';
+import 'package:Life_Connect/Providers/profileProvider.dart';
+import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
+import 'package:Life_Connect/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
+import 'package:Life_Connect/Screens/Splash%20Screen/splashScreen.dart';
+import 'package:Life_Connect/Screens/campDetails.dart';
+import 'package:Life_Connect/Screens/chat.dart';
+import 'package:Life_Connect/Screens/donorChat.dart';
+import 'package:Life_Connect/Screens/donorDetails.dart';
+import 'package:Life_Connect/Screens/donorList.dart';
+import 'package:Life_Connect/Screens/editCampDetails.dart';
+import 'package:Life_Connect/Screens/editProfileDetails.dart';
+import 'package:Life_Connect/Screens/registerCampaign.dart';
+import 'package:Life_Connect/Screens/shedule.dart';
+import 'package:Life_Connect/Screens/home.dart';
+import 'package:Life_Connect/Screens/login.dart';
+import 'package:Life_Connect/Screens/profile.dart';
+import 'package:Life_Connect/Screens/register.dart';
+import 'package:Life_Connect/Screens/welcomePage.dart';
+import 'package:Life_Connect/Services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   runApp(
@@ -31,8 +37,9 @@ void main() {
           providers: [
             ChangeNotifierProvider(create: (_) => AuthProvider()),
             ChangeNotifierProvider(create: (_) => TabIndexNotifier()),
-                        ChangeNotifierProvider(create: (_) => ChatsProvider()),
-
+            ChangeNotifierProvider(create: (_) => ChatsProvider()),
+            ChangeNotifierProvider(
+                create: (_) => ProfileProvider()..fetchHospitalProfile()),
             ChangeNotifierProvider(
                 create: (_) => CampaignProvider()..fetchCamps(context)),
             Provider(create: (_) => AuthService()),
@@ -55,7 +62,7 @@ class MainApp extends StatelessWidget {
     String? hospitalName = prefs.getString('hospitalName');
     // If hospitalName exists, return '/home' (i.e., Bottom Navigation Bar), otherwise '/welcomePage'
     return hospitalName != null && hospitalName.isNotEmpty
-        ? '/bottomNavigationBar'
+        ? '/splashScreen'
         : '/welcomePage';
   }
 
@@ -63,8 +70,11 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // Use FutureBuilder to check if hospitalName exists
+      navigatorKey: navigatorKey,
+
       initialRoute: '/',
       routes: {
+        '/splashScreen': (context) => SplashScreen(),
         '/welcomePage': (context) => const WelcomePage(),
         '/register': (context) => const Register(),
         '/login': (context) => const Login(),
@@ -77,6 +87,8 @@ class MainApp extends StatelessWidget {
         '/sheduledCamp': (context) => const RegisterCampaign(),
         '/campDetails': (context) => const CampDetails(),
         '/editCampDetails': (context) => const EditCampDetails(),
+        '/editProfileDetails': (context) => const EditProfileDetails(),
+        '/donorDetails': (context) => const Donordetails(),
         '/chat': (context) => const ChatsPage(),
       },
       // Use FutureBuilder to asynchronously set initial route based on hospitalName presence
@@ -91,19 +103,24 @@ class MainApp extends StatelessWidget {
               return MaterialApp(
                 initialRoute: snapshot.data,
                 routes: {
+                  '/splashScreen': (context) => SplashScreen(),
                   '/welcomePage': (context) => const WelcomePage(),
-        '/register': (context) => const Register(),
-        '/login': (context) => const Login(),
-        '/home': (context) => const HomePage(),
-        '/shedule': (context) => const ShedulePage(),
-        '/donorChat': (context) => const DonorChat(),
-        '/profile': (context) => const ProfilePage(),
-        '/bottomNavigationBar': (context) => const CustomBottomNavigationBar(),
-        '/donorList': (context) => const DonorListPage(),
-        '/sheduledCamp': (context) => const RegisterCampaign(),
-        '/campDetails': (context) => const CampDetails(),
-        '/editCampDetails': (context) => const EditCampDetails(),
-        '/chat': (context) => const ChatsPage(),
+                  '/register': (context) => const Register(),
+                  '/login': (context) => const Login(),
+                  '/home': (context) => const HomePage(),
+                  '/shedule': (context) => const ShedulePage(),
+                  '/donorChat': (context) => const DonorChat(),
+                  '/profile': (context) => const ProfilePage(),
+                  '/bottomNavigationBar': (context) =>
+                      const CustomBottomNavigationBar(),
+                  '/donorList': (context) => const DonorListPage(),
+                  '/sheduledCamp': (context) => const RegisterCampaign(),
+                  '/campDetails': (context) => const CampDetails(),
+                  '/editCampDetails': (context) => const EditCampDetails(),
+                  '/editProfileDetails': (context) =>
+                      const EditProfileDetails(),
+                  '/donorDetails': (context) => const Donordetails(),
+                  '/chat': (context) => const ChatsPage(),
                 },
               );
             }
@@ -115,21 +132,21 @@ class MainApp extends StatelessWidget {
   }
 }
 
-// import 'package:blood_donation_hospital/Providers/authProvider.dart';
-// import 'package:blood_donation_hospital/Providers/tabIndexNotifier.dart';
-// import 'package:blood_donation_hospital/Providers/userProfileProvider.dart';
-// import 'package:blood_donation_hospital/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
-// import 'package:blood_donation_hospital/Screens/certificateDetails.dart';
-// import 'package:blood_donation_hospital/Screens/certificatePage.dart';
-// import 'package:blood_donation_hospital/Screens/chat.dart';
-// import 'package:blood_donation_hospital/Screens/home.dart';
-// import 'package:blood_donation_hospital/Screens/login.dart';
-// import 'package:blood_donation_hospital/Screens/profile.dart';
-// import 'package:blood_donation_hospital/Screens/register.dart';
-// import 'package:blood_donation_hospital/Screens/userChat.dart';
-// import 'package:blood_donation_hospital/Screens/userProfile.dart';
-// import 'package:blood_donation_hospital/Screens/welcomePage.dart';
-// import 'package:blood_donation_hospital/Services/authService.dart';
+// import 'package:Life_Connect/Providers/authProvider.dart';
+// import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
+// import 'package:Life_Connect/Providers/userProfileProvider.dart';
+// import 'package:Life_Connect/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
+// import 'package:Life_Connect/Screens/certificateDetails.dart';
+// import 'package:Life_Connect/Screens/certificatePage.dart';
+// import 'package:Life_Connect/Screens/chat.dart';
+// import 'package:Life_Connect/Screens/home.dart';
+// import 'package:Life_Connect/Screens/login.dart';
+// import 'package:Life_Connect/Screens/profile.dart';
+// import 'package:Life_Connect/Screens/register.dart';
+// import 'package:Life_Connect/Screens/userChat.dart';
+// import 'package:Life_Connect/Screens/userProfile.dart';
+// import 'package:Life_Connect/Screens/welcomePage.dart';
+// import 'package:Life_Connect/Services/authService.dart';
 // import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 // import 'package:sizer/sizer.dart';
