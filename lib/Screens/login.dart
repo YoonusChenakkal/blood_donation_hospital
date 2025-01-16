@@ -28,8 +28,8 @@ class Login extends StatelessWidget {
           width: 100.w,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(
-                'https://c1.wallpaperflare.com/preview/910/704/36/guardian-angel-doctor-health-angel.jpg',
+              image: AssetImage(
+                'assets/bg_angel.jpg',
               ),
               fit: BoxFit.cover,
               opacity: 0.3,

@@ -1,5 +1,6 @@
 import 'package:Life_Connect/Providers/campaignProvider.dart';
 import 'package:Life_Connect/Providers/donorProvider.dart';
+import 'package:Life_Connect/Providers/hosptalcountProvider.dart';
 import 'package:Life_Connect/Providers/profileProvider.dart';
 import 'package:Life_Connect/widgets/customBanner.dart';
 import 'package:Life_Connect/widgets/customCard.dart';
@@ -22,6 +23,8 @@ class HomePage extends StatelessWidget {
     final donorProvider = Provider.of<DonorProvider>(context);
     final campProvider = Provider.of<CampaignProvider>(context);
     final profileProvider = Provider.of<ProfileProvider>(context);
+        final hospitalCountProvider = Provider.of<HospitalCountProvider>(context);
+
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -122,7 +125,7 @@ class HomePage extends StatelessWidget {
                       CustomCard(
                         title: 'Total\nHospitals',
                         count:
-                            '34', // hospitaProvider.hospitals.length.toString(),
+                            hospitalCountProvider.hospitalCount,
                         image: Image.asset(
                           'assets/hospital-1.png',
                           height: 4.h,
@@ -209,8 +212,7 @@ class HomePage extends StatelessWidget {
                     textColor: Colors.white,
                     buttonText: 'View',
                     onPressed: () {},
-                    imageUrl:
-                        'https://www.cambridgemaths.org/Images/The-trouble-with-graphs.jpg'),
+                    imageUrl: 'assets/bg_graph.jpg'),
               ],
             ),
           ),

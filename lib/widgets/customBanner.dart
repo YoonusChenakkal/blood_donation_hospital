@@ -36,7 +36,7 @@ class CustomBanner extends StatelessWidget {
             : DecorationImage(
                 fit: BoxFit.cover,
                 opacity: 0.9,
-                image: NetworkImage(imageUrl),
+                image: AssetImage(imageUrl),
               ),
       ),
       child: Padding(

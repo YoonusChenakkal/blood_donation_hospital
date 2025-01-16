@@ -32,8 +32,8 @@ class Register extends StatelessWidget {
           width: 100.w,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(
-                  'https://img.freepik.com/free-photo/portrait-hospitalized-sick-girl-child-patient-holding-teddy-bear-resting-bed-medical-co_482257-12229.jpg'),
+              image: AssetImage(
+                  'assets/bg_child.png'),
               fit: BoxFit.cover,
               opacity: 0.3,
             ),

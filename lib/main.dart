@@ -3,6 +3,7 @@ import 'package:Life_Connect/Providers/authProvider.dart';
 import 'package:Life_Connect/Providers/campaignProvider.dart';
 import 'package:Life_Connect/Providers/chatsProvider.dart';
 import 'package:Life_Connect/Providers/donorProvider.dart';
+import 'package:Life_Connect/Providers/hosptalcountProvider.dart';
 import 'package:Life_Connect/Providers/profileProvider.dart';
 import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
 import 'package:Life_Connect/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
@@ -38,6 +39,8 @@ void main() {
             ChangeNotifierProvider(create: (_) => AuthProvider()),
             ChangeNotifierProvider(create: (_) => TabIndexNotifier()),
             ChangeNotifierProvider(create: (_) => ChatsProvider()),
+            ChangeNotifierProvider(
+                create: (_) => HospitalCountProvider()..loadHospitalCount()),
             ChangeNotifierProvider(
                 create: (_) => ProfileProvider()..fetchHospitalProfile()),
             ChangeNotifierProvider(
