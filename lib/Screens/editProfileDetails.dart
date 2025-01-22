@@ -85,6 +85,7 @@ class EditProfileDetails extends StatelessWidget {
                     ),
                     CustomTextfield(
                       hintText: profileProvider.phone ?? 'Phone',
+                      maxlenth: 10,
                       keyboardType: TextInputType.number,
                       icon: Icons.phone_in_talk_outlined,
                       onChanged: (value) {
@@ -106,6 +107,12 @@ class EditProfileDetails extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Profile Not Found')),
                           );
+                        } else if ((profileProvider.editedPhone != null &&
+                                profileProvider.editedPhone!.isNotEmpty) &&
+                            profileProvider.editedPhone!.length < 10) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Number must be 10 digits')));
                         } else {
                           // Proceed with Register User Profile
                           profileProvider.updateProfileDetails(

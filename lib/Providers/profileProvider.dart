@@ -191,6 +191,8 @@ class ProfileProvider extends ChangeNotifier {
       ));
     } finally {
       isLoading = false;
+      editedAddress = null;
+      editedPhone = null;
       notifyListeners();
     }
   }

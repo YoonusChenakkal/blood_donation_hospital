@@ -1,5 +1,6 @@
 import 'package:Life_Connect/Providers/authProvider.dart';
 import 'package:Life_Connect/Providers/profileProvider.dart';
+import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
 import 'package:Life_Connect/widgets/customButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -298,7 +299,8 @@ class ProfilePage extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('hospitalName');
 
-    Provider.of<AuthProvider>(context, listen: false).reset();
+    await Provider.of<AuthProvider>(context, listen: false).reset();
+    Provider.of<TabIndexNotifier>(context, listen: false).setIndex(0);
 
     Navigator.pushNamedAndRemoveUntil(
       context,

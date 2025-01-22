@@ -32,8 +32,7 @@ class Register extends StatelessWidget {
           width: 100.w,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(
-                  'assets/bg_child.png'),
+              image: AssetImage('assets/bg_child.png'),
               fit: BoxFit.cover,
               opacity: 0.3,
             ),
@@ -103,6 +102,7 @@ class Register extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       icon: Icons.phone_in_talk_outlined,
                       enabled: authProvider.showOtpField ? false : true,
+                      maxlenth: 10,
                       onChanged: (value) {
                         authProvider.phone = value.trim();
                       },
@@ -140,7 +140,7 @@ class Register extends StatelessWidget {
                     // Submit Button
                     CustomButton(
                       text: authProvider.showOtpField ? 'Register' : 'Submit',
-                      isLoading:authProvider.isLoading ,
+                      isLoading: authProvider.isLoading,
                       onPressed: authProvider.showOtpField
                           ? () {
                               if (authProvider.otp!.isEmpty ||
@@ -172,6 +172,13 @@ class Register extends StatelessWidget {
                                   const SnackBar(
                                       content: Text('Please fill all fields.')),
                                 );
+                              } else if ((authProvider.phone != null &&
+                                      authProvider.phone!.isNotEmpty) &&
+                                  authProvider.phone!.length < 10) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Number must be 10 digits')));
                               } else {
                                 // Proceed with registration
                                 authService.registerUser(
