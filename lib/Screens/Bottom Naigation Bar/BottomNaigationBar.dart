@@ -1,7 +1,6 @@
 import 'package:Life_Connect/Providers/authProvider.dart';
 import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
 import 'package:Life_Connect/Screens/SheduledCamp.dart';
-import 'package:Life_Connect/Screens/chat.dart';
 import 'package:Life_Connect/Screens/donorList.dart';
 import 'package:Life_Connect/Screens/home.dart';
 import 'package:Life_Connect/Screens/profile.dart';
@@ -26,7 +25,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           builder: (context, tabIndexNotifier, child) {
             final screens = [
               const HomePage(),
-              const ChatsPage(),
+              // const ChatsPage(),
               const Scheduledcamps(),
               const DonorListPage(),
               const ProfilePage(),
@@ -62,13 +61,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       ),
                       label: 'Home',
                     ),
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.message_outlined,
-                        size: 20.sp,
-                      ),
-                      label: 'chat',
-                    ),
+                    // BottomNavigationBarItem(
+                    //   icon: Icon(
+                    //     Icons.message_outlined,
+                    //     size: 20.sp,
+                    //   ),
+                    //   label: 'chat',
+                    // ),
                     BottomNavigationBarItem(
                       icon: Icon(
                         Icons.campaign_outlined,

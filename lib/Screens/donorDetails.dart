@@ -1,8 +1,10 @@
-import 'package:Life_Connect/Models/donorListModel.dart';
+import 'package:Life_Connect/Models/donorModel.dart';
+import 'package:Life_Connect/Providers/chatsProvider.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class Donordetails extends StatelessWidget {
@@ -105,6 +107,17 @@ class Donordetails extends StatelessWidget {
                 title: 'Phone',
                 value: donor.contactNumber.toString(),
                 context: context),
+
+            _buildDetailsCard(
+                icon: Icons.message_outlined,
+                title: 'Chat',
+                value: 'Message ${donor.user}',
+                context: context,
+                onTap: () {
+                  Provider.of<ChatsProvider>(context, listen: false)
+                      .fetchChats(donor.user);
+                  Navigator.pushNamed(context, '/donorChat', arguments: donor);
+                }),
           ],
         ),
       ),
@@ -115,8 +128,10 @@ class Donordetails extends StatelessWidget {
       {required IconData icon,
       required String title,
       required String value,
-      required BuildContext context}) {
+      required BuildContext context,
+      onTap}) {
     return GestureDetector(
+      onTap: onTap,
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: .5.h),
         elevation: 6,

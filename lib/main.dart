@@ -9,7 +9,6 @@ import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
 import 'package:Life_Connect/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
 import 'package:Life_Connect/Screens/Splash%20Screen/splashScreen.dart';
 import 'package:Life_Connect/Screens/campDetails.dart';
-import 'package:Life_Connect/Screens/chat.dart';
 import 'package:Life_Connect/Screens/donorChat.dart';
 import 'package:Life_Connect/Screens/donorDetails.dart';
 import 'package:Life_Connect/Screens/donorList.dart';
@@ -92,7 +91,6 @@ class MainApp extends StatelessWidget {
         '/editCampDetails': (context) => const EditCampDetails(),
         '/editProfileDetails': (context) => const EditProfileDetails(),
         '/donorDetails': (context) => const Donordetails(),
-        '/chat': (context) => const ChatsPage(),
       },
       // Use FutureBuilder to asynchronously set initial route based on hospitalName presence
       builder: (context, child) {
@@ -123,7 +121,6 @@ class MainApp extends StatelessWidget {
                   '/editProfileDetails': (context) =>
                       const EditProfileDetails(),
                   '/donorDetails': (context) => const Donordetails(),
-                  '/chat': (context) => const ChatsPage(),
                 },
               );
             }
@@ -134,61 +131,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
-// import 'package:Life_Connect/Providers/authProvider.dart';
-// import 'package:Life_Connect/Providers/tabIndexNotifier.dart';
-// import 'package:Life_Connect/Providers/userProfileProvider.dart';
-// import 'package:Life_Connect/Screens/Bottom%20Naigation%20Bar/BottomNaigationBar.dart';
-// import 'package:Life_Connect/Screens/certificateDetails.dart';
-// import 'package:Life_Connect/Screens/certificatePage.dart';
-// import 'package:Life_Connect/Screens/chat.dart';
-// import 'package:Life_Connect/Screens/home.dart';
-// import 'package:Life_Connect/Screens/login.dart';
-// import 'package:Life_Connect/Screens/profile.dart';
-// import 'package:Life_Connect/Screens/register.dart';
-// import 'package:Life_Connect/Screens/userChat.dart';
-// import 'package:Life_Connect/Screens/userProfile.dart';
-// import 'package:Life_Connect/Screens/welcomePage.dart';
-// import 'package:Life_Connect/Services/authService.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:sizer/sizer.dart';
-
-// void main() {
-//   runApp(
-//     Sizer(
-//       builder: (context, orientation, deviceType) {
-//         return MultiProvider(providers: [
-//           ChangeNotifierProvider(create: (_) => AuthProvider()),
-//           ChangeNotifierProvider(create: (_) => TabIndexNotifier()),
-//           ChangeNotifierProvider(create: (_) => UserProfileProvider()),
-//           Provider(create: (_) => AuthService()),
-//         ], child: const MainApp()); // Wrap the MainApp with Sizer
-//       },
-//     ),
-//   );
-// }
-
-// class MainApp extends StatelessWidget {
-//   const MainApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       initialRoute: '/welcomePage',
-//       routes: {
-//         '/welcomePage': (context) => const WelcomePage(),
-//         '/register': (context) => const Register(),
-//         '/login': (context) => const Login(),
-//         '/home': (context) => const HomePage(),
-//         '/chats': (context) => const ChatsPage(),
-//         '/userChat': (context) => const UserChat(),
-//         '/profile': (context) => const ProfilePage(),
-//         '/bottomNavigationBar': (context) => const CustomBottomNavigationBar(),
-//         '/certificateDetails': (context) => const CertificateDetails(),
-//         '/userProfile': (context) => const UserProfile(),
-//         '/certificatePage': (context) => const CertificatePage(),
-//       },
-//     );
-//   }
-// }

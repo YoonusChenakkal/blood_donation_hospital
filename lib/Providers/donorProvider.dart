@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:Life_Connect/Models/donorModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../Models/donorListModel.dart';
 
 class DonorProvider extends ChangeNotifier {
   List<DonorModel> donors = [];
