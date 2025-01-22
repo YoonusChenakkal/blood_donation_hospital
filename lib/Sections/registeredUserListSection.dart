@@ -137,7 +137,7 @@ class userRegisteredListSection extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.arrow_downward,
                       ),
                       SizedBox(

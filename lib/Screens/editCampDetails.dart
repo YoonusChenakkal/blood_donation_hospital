@@ -177,7 +177,7 @@ class EditCampDetails extends StatelessWidget {
                     ),
                     SizedBox(height: 2.h),
                     CustomTextfield(
-                        height: 7.5,
+                        height: 7,
                         hintText: filteredCamp.description ?? 'Description',
                         icon: Icons.notes,
                         onChanged: (value) =>

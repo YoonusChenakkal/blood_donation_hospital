@@ -159,14 +159,13 @@ class RegisterCampaign extends StatelessWidget {
                     ),
                     SizedBox(height: 2.h),
                     CustomTextfield(
-                        height: 9,
-                        hintText: 'Description',
-                        icon: Icons.notes,
-                        onChanged: (value) =>
-                            campaignProvider.setDescription(value),
-                        keyboardType: TextInputType.multiline,
-                        minLines: 3,
-                        maxLines: null),
+                      height: 7,
+                      hintText: 'Description',
+                      icon: Icons.notes,
+                      onChanged: (value) =>
+                          campaignProvider.setDescription(value),
+                      keyboardType: TextInputType.multiline,
+                    ),
                     SizedBox(height: 4.5.h),
                     CustomButton(
                       text: 'Submit',
