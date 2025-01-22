@@ -102,8 +102,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
   _showExitDialog(
     BuildContext context,
   ) async {
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -124,7 +122,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              authProvider.reset();
               Navigator.popUntil(context, (route) => false);
               SystemNavigator.pop();
             },

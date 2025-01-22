@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
                   title2: 'Make them happy',
                   textColor: Colors.white,
                   buttonText: 'View',
-                  onPressed: () {},
+                  onPressed: () => showDonationDialog(context),
                   imageUrl: 'assets/bg_surgery.jpg',
                 ),
                 SizedBox(height: 2.h),
@@ -303,6 +303,57 @@ class HomePage extends StatelessWidget {
                 ],
               )
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  showDonationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          content: Container(
+            padding: EdgeInsets.all(4.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Donate If You Can Save One Life',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.redAccent,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  'Every donation can change a life! You have the power to save lives and make a positive impact on the community. Every drop counts!',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.black54,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 2.h),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    'Close',
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.redAccent),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
