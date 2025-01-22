@@ -232,7 +232,7 @@ class HomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Data Distribution',
+                'Donor and Hospital Ratio',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.sp,
@@ -343,13 +343,12 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 2.h),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.redAccent),
+                  ),
                   child: Text(
                     'Close',
                     style: TextStyle(color: Colors.white, fontSize: 14.sp),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.redAccent),
                   ),
                 ),
               ],
