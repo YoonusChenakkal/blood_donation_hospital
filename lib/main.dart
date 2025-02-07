@@ -26,10 +26,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async {
+  // Ensure widgets binding is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock orientation to portrait
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
+  // Run the app
   runApp(
     Sizer(
       builder: (context, orientation, deviceType) {
@@ -48,7 +58,7 @@ void main() {
             ChangeNotifierProvider(
                 create: (_) => DonorProvider()..loadDonors()),
           ],
-          child: const MainApp(), // Wrap the MainApp with Sizer
+          child: const MainApp(),
         );
       },
     ),

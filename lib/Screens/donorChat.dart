@@ -52,14 +52,7 @@ class DonorChat extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                // Text(
-                //   '3 weeks ago',
-                //   style: TextStyle(
-                //     fontSize: 14.sp,
-                //     color: Colors.white,
-                //     fontWeight: FontWeight.w400,
-                //   ),
-                // ),
+          
               ],
             ),
           ],
